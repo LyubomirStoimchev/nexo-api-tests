@@ -1,0 +1,24 @@
+{
+  "name": "cucumber-tests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "@cucumber/cucumber": "^10.7.0",
+    "axios": "^1.6.8",
+    "chai": "^5.1.1",
+    "soft-assert": "^0.2.7"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "cucumber-js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.3.0",
+    "eslint": "^9.3.0",
+    "globals": "^15.2.0"
+  }
+}
