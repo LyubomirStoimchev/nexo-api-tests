@@ -5,6 +5,7 @@ import Utils from "../support/utils.js";
 import softAssert from "soft-assert";
 import PricesService from "../services/PricesService.js";
 
+// Can be injected into the Global World like POMs in the UI tests project
 const pricesService = new PricesService(BASE_URL);
 
 /**
@@ -23,19 +24,19 @@ setWorldConstructor(CustomWorld);
  * Step definition for collecting prices at regular intervals.
  * Timeout is set to -1 to disable the default timeout of 5000ms.
  * @param {string} symbol - The symbol of the price to collect.
- * @param {number} wait - The interval in seconds between price collection.
- * @param {number} minutes - The duration in minutes for price collection.
+ * @param {number} pollInterval - The interval in seconds between price collection.
+ * @param {number} collectDuration - The duration in minutes for price collection.
  */
 When(
     "I collect {string} prices every {int} seconds for {int} minutes",
     { timeout: -1 },
-    async function (symbol, wait, minutes) {
+    async function (symbol, pollInterval, collectDuration) {
         expect(symbol).to.not.be.empty;
-        expect(wait).to.be.above(0);
-        expect(minutes).to.be.above(0);
+        expect(pollInterval).to.be.above(0);
+        expect(collectDuration).to.be.above(0);
 
         const startTime = Date.now();
-        const endTime = startTime + minutes * 60 * 1000;
+        const endTime = startTime + collectDuration * 60 * 1000;
         while (Date.now() < endTime) {
             const currentPrice = await pricesService.getPrice(symbol);
             expect(currentPrice).to.not.be.NaN;
@@ -48,7 +49,7 @@ When(
             if (!this.initialPrice) this.initialPrice = currentPrice;
             this.prices.push(currentPrice);
 
-            await new Promise((resolve) => setTimeout(resolve, wait * 1000));
+            await new Promise((resolve) => setTimeout(resolve, pollInterval * 1000));
         }
     }
 );
